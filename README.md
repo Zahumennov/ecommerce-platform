@@ -82,6 +82,40 @@ make migrate-user
 make test-user
 ```
 
+## Testing Strategy
+
+This project follows the **Testing Pyramid** approach:
+
+- **Unit tests** — test individual functions and classes in isolation (no DB, no network)
+- **Integration tests** — test a service with its real database and Redis
+- **E2E tests** — test the full request flow through multiple services
+
+### Tools
+
+- `pytest` + `pytest-asyncio` — async test runner
+- `httpx` — async HTTP client for testing FastAPI endpoints
+- `pytest-cov` — code coverage reports
+- `factory-boy` — test data factories instead of hardcoded fixtures
+- `testcontainers` — spins up a real PostgreSQL/Redis in Docker during integration tests
+
+### Coverage Requirements
+
+Every service must maintain **minimum 80% test coverage**.
+CI pipeline will fail if coverage drops below this threshold.
+
+### Running Tests
+
+```bash
+# Unit tests only (fast)
+make test-unit
+
+# Integration tests (requires Docker)
+make test-integration
+
+# All tests with coverage report
+make test-cov
+```
+
 ## Commit Convention
 
 This project follows [Conventional Commits](https://www.conventionalcommits.org/):

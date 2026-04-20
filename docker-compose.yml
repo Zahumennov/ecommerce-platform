@@ -114,6 +114,31 @@ services:
       timeout: 10s
       retries: 5
 
+  # ─── Services ────────────────────────────────────────────
+
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres-users:5432/users_db
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: ${SECRET_KEY:-local-dev-secret-key}
+      DEBUG: "true"
+    depends_on:
+      postgres-users:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
 volumes:
   postgres_users_data:
   postgres_products_data:
@@ -122,3 +147,4 @@ volumes:
   postgres_delivery_data:
   redis_data:
   rabbitmq_data:
+

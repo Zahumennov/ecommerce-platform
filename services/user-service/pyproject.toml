@@ -1,0 +1,57 @@
+[project]
+name = "user-service"
+version = "0.1.0"
+description = "User authentication and profile management"
+authors = [
+    {name = "Dmytro Zahumennov",email = "zahumennov@gmail.com"}
+]
+requires-python = "^3.12"
+dependencies = [
+    "fastapi (>=0.135.3,<0.136.0)",
+    "uvicorn[standard] (>=0.44.0,<0.45.0)",
+    "sqlalchemy[asyncio] (>=2.0.49,<3.0.0)",
+    "asyncpg (>=0.31.0,<0.32.0)",
+    "alembic (>=1.18.4,<2.0.0)",
+    "pydantic-settings (>=2.13.1,<3.0.0)",
+    "python-jose[cryptography] (>=3.5.0,<4.0.0)",
+    "redis[asyncio] (>=7.4.0,<8.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "pydantic[email] (>=2.13.1,<3.0.0)",
+    "greenlet (>=3.4.0,<4.0.0)",
+    "bcrypt (>=5.0.0,<6.0.0)",
+    "python-multipart (>=0.0.26,<0.0.27)"
+]
+
+[tool.poetry]
+package-mode = false
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.3,<10.0.0)",
+    "pytest-asyncio (>=1.3.0,<2.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "factory-boy (>=3.3.3,<4.0.0)",
+    "testcontainers (>=4.14.2,<5.0.0)",
+    "ruff (>=0.15.10,<0.16.0)"
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes — unused imports, undefined names
+    "I",   # isort — import ordering
+]

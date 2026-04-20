@@ -11,6 +11,7 @@ from app.config import settings
 from app.database import AsyncSessionLocal
 from app.models import User
 from app.repositories.user import UserRepository
+from app.services.user import UserService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -80,9 +81,15 @@ async def get_current_active_user(
         )
     return current_user
 
+async def get_user_service(
+    repo: Annotated[UserRepository, Depends(get_user_repository)],
+) -> UserService:
+    return UserService(repo)
+
 
 # Type aliases for cleaner endpoint signatures
 DBSession = Annotated[AsyncSession, Depends(get_db)]
 RedisClient = Annotated[aioredis.Redis, Depends(get_redis)]
 UserRepo = Annotated[UserRepository, Depends(get_user_repository)]
 CurrentUser = Annotated[User, Depends(get_current_active_user)]
+UserServiceDep = Annotated[UserService, Depends(get_user_service)]
